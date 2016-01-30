@@ -1,0 +1,4 @@
+baseurl: "/DS61-food-searcher"
+url: "https://erliz.github.io/"
+include:
+  - .nojekyll
