@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DS61 Food Searcher</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script type="text/javascript" src="3-party/jquery-ui/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="3-party/jquery-ui/jquery-ui.min.css">
+    <!--<link rel="stylesheet" href="3-party/jquery-ui/jquery-ui.theme.min.css">-->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">-->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="3-party/bootstrap-material-design/css/bootstrap-material-design.min.css">
+    <link rel="stylesheet" href="3-party/bootstrap-material-design/css/ripples.min.css">
+    <script type="text/javascript" src="3-party/bootstrap-material-design/js/material.min.js"></script>
+    <script type="text/javascript" src="3-party/bootstrap-material-design/js/ripples.min.js"></script>
+
+    <script type="text/javascript" src="data/ds61_items_list.js"></script>
+
+    <meta name="theme-color" content="#ffffff">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <meta name="format-detection" content="telephone=no">
+
+    <style type="text/css">
+        input {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<form action="">
+    <div class="form-group label-floating">
+        <label class="control-label" for="focusedInput1">Code</label>
+        <input class="form-control" id="focusedInput1" autocomplete="off" type="tel" name="code" pattern="\d"
+               maxlength="3">
+    </div>
+    <div class="form-group label-floating">
+        <label class="control-label" for="focusedInput2">Title</label>
+        <input class="form-control" id="focusedInput2" autocomplete="off" type="text" name="title">
+    </div>
+</form>
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        $.material.init();
+        var db = ds61ItemList;
+        var codeInput = document.querySelector('input[name=code]');
+        var titleInput = document.querySelector('input[name=title]');
+
+        codeInput.addEventListener('change', function (e) {
+            var value = e.target.value;
+            if (value.length < 3) {
+                return;
+            }
+            var item = db.filter(function (dbItem) {
+                return dbItem[0] == value;
+            });
+            if (item.length == 0) {
+                return;
+            }
+            $(titleInput).parent().removeClass('is-empty');
+            titleInput.value = item[0][1];
+        });
+        $(titleInput).autocomplete({
+                    minLength: 3,
+                    source: db,
+                    focus: function (event, ui) {
+                        $(titleInput).val(ui.item[1]);
+                        return false;
+                    },
+                    select: function (event, ui) {
+                        $(titleInput).val(ui.item[1]);
+                        $(codeInput).val(ui.item[0]).parent().removeClass('is-empty');
+                        return false;
+                    },
+                    open: function () {
+                        $(this).data("uiAutocomplete").menu.element.addClass("dropdown-menu");
+                    }
+                })
+                .autocomplete("instance")._renderItem = function (ul, item) {
+            return $("<li>")
+                    .append("<a>" + item[1] + "</a>")
+                    .appendTo(ul);
+        };
+    });
+</script>
+</body>
+</html>
