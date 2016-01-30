@@ -13,6 +13,12 @@
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
     <meta name="format-detection" content="telephone=no">
 
+    <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+
+    <link rel="import" href="bower_components/platinum-sw/service-worker.js">
+    <link rel="import" href="bower_components/platinum-sw/platinum-sw-register.html">
+    <link rel="import" href="bower_components/platinum-sw/platinum-sw-cache.html">
+
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="bower_components/bootstrap-material-design/dist/js/material.min.js"></script>
@@ -46,6 +52,10 @@
         </div>
     </form>
 </div>
+
+<platinum-sw-register auto-register>
+    <platinum-sw-cache default-cache-strategy="networkFirst"></platinum-sw-cache>
+</platinum-sw-register>
 
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function () {
