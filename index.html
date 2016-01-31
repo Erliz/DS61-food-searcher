@@ -63,7 +63,8 @@
 </platinum-sw-register>
 
 <script type="text/babel">
-//  todo implement two way binding https://facebook.github.io/react/docs/two-way-binding-helpers.html
+    // todo use ReactCSSTransitionGroup
+    // todo implement two way binding https://facebook.github.io/react/docs/two-way-binding-helpers.html
 //    var LinkedStateMixin = require('react-addons-linked-state-mixin');
 
     var InputMixin = {
@@ -71,11 +72,6 @@
             return {
                 value: '',
                 onChange: function(){}
-            };
-        },
-        getInitialState: function() {
-            return {
-                value: this.props.value
             };
         },
         componentWillReceiveProps: function(nextProps) {
@@ -86,7 +82,6 @@
             }
         },
         onChange: function(newValue) {
-            this.setState({value: newValue});
             this.props.onChange(newValue);
         }
     };
@@ -135,7 +130,7 @@
             return (
                 <BootstrapInput
                     onChange={this.onChange}
-                    value={this.state.value}
+                    value={this.props.value}
                     name="Title"
                     id="title"
                     type="text">
@@ -150,7 +145,7 @@
             return (
                 <BootstrapInput
                     onChange={this.onChange}
-                    value={this.state.value}
+                    value={this.props.value}
                     name="Code"
                     id="code"
                     type="tel"
@@ -180,34 +175,33 @@
             this.updateDesign();
         },
         handleCodeChange: function(value) {
-            if (value.length < 3) {
-                return;
+            var newState = {codeValue: value};
+            if (value.length == 3) {
+                var item = this.props.data.filter(function (dbItem) {
+                    return dbItem[0] == value;
+                });
+                if (item.length > 0) {
+                    newState.titleValue = item[0][1];
+                }
             }
-            var item = this.props.data.filter(function (dbItem) {
-                return dbItem[0] == value;
-            });
-            if (item.length == 0) {
-                return;
-            }
-            this.setState({titleValue: item[0][1]});
+            this.setState(newState);
         },
         handleTitleChange: function(value) {
-            if (value.length < 3) {
-                if (this.state.suggestValues.length) {
-                    this.setState({
-                        suggestValues: []
-                    })
+            var newState = {titleValue: value};
+            if (value.length >= 3) {
+                var expression = new RegExp(value, "i");
+                var items = this.props.data.filter(function (dbItem) {
+                    return expression.test(dbItem);
+                });
+                if (items.length > 0) {
+                    newState.suggestValues = items.slice(0, this.props.maxSuggestValues);
                 }
-                return;
+            } else {
+                if (this.state.suggestValues.length) {
+                    newState.suggestValues = [];
+                }
             }
-            var expression = new RegExp(value, "i");
-            var items = this.props.data.filter(function (dbItem) {
-                return expression.test(dbItem);
-            });
-            if (items.length == 0) {
-                return;
-            }
-            this.setState({suggestValues: items.slice(0, this.props.maxSuggestValues)});
+            this.setState(newState);
         },
         handleSuggestSelect: function(suggest) {
             this.setState({
