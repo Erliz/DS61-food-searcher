@@ -193,6 +193,11 @@
         },
         handleTitleChange: function(value) {
             if (value.length < 3) {
+                if (this.state.suggestValues.length) {
+                    this.setState({
+                        suggestValues: []
+                    })
+                }
                 return;
             }
             var expression = new RegExp(value, "i");
