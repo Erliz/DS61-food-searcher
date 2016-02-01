@@ -1,7 +1,0 @@
-{
-  "generator-react-webpack": {
-    "appName": "ds61-food-searcher",
-    "style": "stylus",
-    "postcss": true
-  }
-}
