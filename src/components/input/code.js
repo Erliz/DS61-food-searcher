@@ -1,13 +1,12 @@
 import React from 'react';
-import InputMixin from './mixin';
+import InputBase from './base';
 import BootstrapInput from './bootstrap-input';
 
-let Code = React.createClass({
-    mixins: [InputMixin],
-    render: function() {
+class Code extends InputBase {
+    render() {
         return (
             <BootstrapInput
-                onChange={this.onChange}
+                onChange={super.onChange.bind(this)}
                 value={this.props.value}
                 name="Code"
                 id="code"
@@ -16,6 +15,6 @@ let Code = React.createClass({
                 pattern="\d+" />
         )
     }
-});
+}
 
 export default Code;

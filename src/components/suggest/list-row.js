@@ -1,12 +1,12 @@
 import React from 'react';
 
-let SuggestListRow = React.createClass({
-    onFocus: function () {
+class SuggestListRow extends React.Component {
+    onFocus () {
         this.props.onSelect({code: this.props.code, title: this.props.title})
-    },
-    render: function () {
-        return (<li onClick={this.onFocus} ><a href="javascript:void(0)">{this.props.title}</a></li>)
     }
-});
+    render () {
+        return (<li onClick={this.onFocus.bind(this)} ><a href="javascript:void(0)">{this.props.title}</a></li>)
+    }
+}
 
 export default SuggestListRow;

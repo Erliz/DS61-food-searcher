@@ -1,13 +1,12 @@
 import React from 'react';
-import InputMixin from './mixin';
+import InputBase from './base';
 import BootstrapInput from './bootstrap-input';
 
-let Title = React.createClass({
-    mixins: [InputMixin],
-    render: function() {
+class Title extends InputBase {
+    render() {
         return (
             <BootstrapInput
-                onChange={this.onChange}
+                onChange={super.onChange.bind(this)}
                 value={this.props.value}
                 name="Title"
                 id="title"
@@ -16,6 +15,6 @@ let Title = React.createClass({
             </BootstrapInput>
         )
     }
-});
+}
 
 export default Title;
